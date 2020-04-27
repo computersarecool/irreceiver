@@ -11,7 +11,7 @@ from typing import Callable
 
 import pigpio
 
-import nec_decoder
+import irreceiver
 
 
 class PiPulseCollector:
@@ -20,7 +20,7 @@ class PiPulseCollector:
     """
     def __init__(self, pi: pigpio.pi, receive_pin: int,
                  done_callback: Callable, max_time: int,
-                 decoder: nec_decoder.NecDecoder):
+                 decoder: irreceiver.NecDecoder):
         self.pi = pi
         self.receive_pin = receive_pin
         self.done_callback = done_callback
@@ -76,7 +76,7 @@ def ir_callback(code: int):
         code: The decoded signal
     """
 
-    print('Invalid code') if code == nec_decoder.INVALID_FRAME else print(
+    print('Invalid code') if code == irreceiver.INVALID_FRAME else print(
         hex(code))
 
 
@@ -88,10 +88,10 @@ def main():
     pi = pigpio.pi()
     pi.set_mode(ir_pin, pigpio.INPUT)
 
-    decoder = nec_decoder.NecDecoder()
+    decoder = irreceiver.NecDecoder()
     collector = PiPulseCollector(
         pi, ir_pin, ir_callback,
-        nec_decoder.FRAME_TIME_MS + nec_decoder.TIMING_TOLERANCE, decoder)
+        irreceiver.FRAME_TIME_MS + irreceiver.TIMING_TOLERANCE, decoder)
     _ = pi.callback(ir_pin, pigpio.EITHER_EDGE, collector.collect_pulses)
 
     print('Press Ctrl-c to exit')

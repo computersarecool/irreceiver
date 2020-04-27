@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from nec_decoder import NecDecoder, INVALID_FRAME, REPEAT_MESSAGE, NEW_MESSAGE
+from irreceiver import NecDecoder, INVALID_FRAME, REPEAT_MESSAGE, NEW_MESSAGE
 
 
 class TestNecDecoder(TestCase):
