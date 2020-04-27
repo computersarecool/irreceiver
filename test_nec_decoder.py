@@ -10,32 +10,87 @@ class TestNecDecoder(TestCase):
     # Most tests are run against the frame for address 00h (00000000b) and command ADh (10101101b):
     reference_pulses = [
         # Pulse and space
-        9000, 4500,
+        9000,
+        4500,
         # Address pt 1
-        562.5, 562.5, 562.5, 562.5, 562.5, 562.5, 562.5, 562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
         # Address pt 2
-        562.5, 562.5, 562.5, 562.5, 562.5, 562.5, 562.5, 562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
         # Address inverse pt 1
-        562.5, 1687.5, 562.5, 1687.5, 562.5, 1687.5, 562.5, 1687.5,
+        562.5,
+        1687.5,
+        562.5,
+        1687.5,
+        562.5,
+        1687.5,
+        562.5,
+        1687.5,
         # Address inverse pt 2
-        562.5, 1687.5, 562.5, 1687.5, 562.5, 1687.5, 562.5, 1687.5,
+        562.5,
+        1687.5,
+        562.5,
+        1687.5,
+        562.5,
+        1687.5,
+        562.5,
+        1687.5,
         # Command (LSB first) pt 1
-        562.5, 1687.5, 562.5, 562.5, 562.5, 1687.5, 562.5, 1687.5,
+        562.5,
+        1687.5,
+        562.5,
+        562.5,
+        562.5,
+        1687.5,
+        562.5,
+        1687.5,
         # Command (LSB first) pt 2
-        562.5, 562.5, 562.5, 1687.5, 562.5, 562.5, 562.5, 1687.5,
+        562.5,
+        562.5,
+        562.5,
+        1687.5,
+        562.5,
+        562.5,
+        562.5,
+        1687.5,
         # Command (LSB first) inverse pt 1
-        562.5, 562.5, 562.5, 1687.5, 562.5, 562.5, 562.5, 562.5,
+        562.5,
+        562.5,
+        562.5,
+        1687.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
         # Command (LSB first) inverse pt 2
-        562.5, 1687.5, 562.5, 562.5, 562.5, 1687.5, 562.5, 562.5,
+        562.5,
+        1687.5,
+        562.5,
+        562.5,
+        562.5,
+        1687.5,
+        562.5,
+        562.5,
         # Final burst
         562.5
     ]
 
     # The reference_pulses correspond to this list of bits
     reference_bits = [
-        0, 0, 0, 0, 0, 0, 0, 0,
-        1, 1, 1, 1, 1, 1, 1, 1,
-        1, 0, 1, 1, 0, 1, 0, 1,
+        0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1,
         0, 1, 0, 0, 1, 0, 1, 0
     ]
 
@@ -54,7 +109,10 @@ class TestNecDecoder(TestCase):
         assert start == first_element_index
 
     def test__find_start_index_slow(self):
-        pulses_slow = [pulse + pulse * TestNecDecoder.time_multiplier for pulse in TestNecDecoder.reference_pulses]
+        pulses_slow = [
+            pulse + pulse * TestNecDecoder.time_multiplier
+            for pulse in TestNecDecoder.reference_pulses
+        ]
 
         decoder = NecDecoder()
         first_element_index = 0
@@ -63,7 +121,10 @@ class TestNecDecoder(TestCase):
         assert start == first_element_index
 
     def test__find_start_index_fast(self):
-        pulses_fast = [pulse - pulse * TestNecDecoder.time_multiplier for pulse in TestNecDecoder.reference_pulses]
+        pulses_fast = [
+            pulse - pulse * TestNecDecoder.time_multiplier
+            for pulse in TestNecDecoder.reference_pulses
+        ]
 
         decoder = NecDecoder()
         first_element_index = 0
@@ -90,9 +151,11 @@ class TestNecDecoder(TestCase):
 
     def test_repeat_message(self):
         decoder = NecDecoder()
-        start = decoder._find_start_index(TestNecDecoder.reference_repeat_pulses)
+        start = decoder._find_start_index(
+            TestNecDecoder.reference_repeat_pulses)
 
-        decoder._classify_message(TestNecDecoder.reference_repeat_pulses, start)
+        decoder._classify_message(TestNecDecoder.reference_repeat_pulses,
+                                  start)
 
         assert decoder.current_message_type == REPEAT_MESSAGE
 
@@ -139,23 +202,32 @@ class TestNecDecoder(TestCase):
         decoder = NecDecoder()
         start = decoder._find_start_index(TestNecDecoder.reference_pulses)
 
-        assert TestNecDecoder.reference_bits == decoder._convert_pulses(TestNecDecoder.reference_pulses, start)
+        assert TestNecDecoder.reference_bits == decoder._convert_pulses(
+            TestNecDecoder.reference_pulses, start)
 
     def test_convert_pulses_slow(self):
-        pulses_slow = [pulse + pulse * TestNecDecoder.time_multiplier for pulse in TestNecDecoder.reference_pulses]
+        pulses_slow = [
+            pulse + pulse * TestNecDecoder.time_multiplier
+            for pulse in TestNecDecoder.reference_pulses
+        ]
 
         decoder = NecDecoder()
         start = decoder._find_start_index(TestNecDecoder.reference_pulses)
 
-        assert TestNecDecoder.reference_bits == decoder._convert_pulses(pulses_slow, start)
+        assert TestNecDecoder.reference_bits == decoder._convert_pulses(
+            pulses_slow, start)
 
     def test_convert_pulses_fast(self):
-        pulses_fast = [pulse - pulse * TestNecDecoder.time_multiplier for pulse in TestNecDecoder.reference_pulses]
+        pulses_fast = [
+            pulse - pulse * TestNecDecoder.time_multiplier
+            for pulse in TestNecDecoder.reference_pulses
+        ]
 
         decoder = NecDecoder()
         start = decoder._find_start_index(TestNecDecoder.reference_pulses)
 
-        assert TestNecDecoder.reference_bits == decoder._convert_pulses(pulses_fast, start)
+        assert TestNecDecoder.reference_bits == decoder._convert_pulses(
+            pulses_fast, start)
 
     # Valid bit lists
     def test__validate_message_valid(self):
@@ -176,7 +248,8 @@ class TestNecDecoder(TestCase):
     def test__create_number_from_bits_spec(self):
         decoder = NecDecoder()
 
-        assert decoder._create_number_from_bits(TestNecDecoder.reference_bits) == TestNecDecoder.reference_number
+        assert decoder._create_number_from_bits(
+            TestNecDecoder.reference_bits) == TestNecDecoder.reference_number
 
     def test__create_number_from_bits_with_address(self):
         # The spec bit_list looks like:
@@ -199,7 +272,8 @@ class TestNecDecoder(TestCase):
         bit_list_with_address[8] = 0
 
         decoder = NecDecoder()
-        number_returned = decoder._create_number_from_bits(bit_list_with_address)
+        number_returned = decoder._create_number_from_bits(
+            bit_list_with_address)
 
         input_command = address << 8 | command
 
@@ -208,17 +282,24 @@ class TestNecDecoder(TestCase):
     def test_decode_spec(self):
         decoder = NecDecoder()
 
-        assert decoder.decode(TestNecDecoder.reference_pulses) == TestNecDecoder.reference_number
+        assert decoder.decode(
+            TestNecDecoder.reference_pulses) == TestNecDecoder.reference_number
 
     def test_decode_spec_slow(self):
-        pulses_slow = [pulse + pulse * TestNecDecoder.time_multiplier for pulse in TestNecDecoder.reference_pulses]
+        pulses_slow = [
+            pulse + pulse * TestNecDecoder.time_multiplier
+            for pulse in TestNecDecoder.reference_pulses
+        ]
 
         decoder = NecDecoder()
 
         assert decoder.decode(pulses_slow) == TestNecDecoder.reference_number
 
     def test_decode_spec_fast(self):
-        pulses_slow = [pulse - pulse * TestNecDecoder.time_multiplier for pulse in TestNecDecoder.reference_pulses]
+        pulses_slow = [
+            pulse - pulse * TestNecDecoder.time_multiplier
+            for pulse in TestNecDecoder.reference_pulses
+        ]
 
         decoder = NecDecoder()
 
@@ -237,23 +318,80 @@ class TestNecDecoder(TestCase):
 
         reference_pulses_extended = [
             # Pulse and space
-            9000, 4500,
+            9000,
+            4500,
             # Address pt 1
-            562.5, 1687.5, 562.5, 562.5, 562.5, 562.5, 562.5, 562.5,
+            562.5,
+            1687.5,
+            562.5,
+            562.5,
+            562.5,
+            562.5,
+            562.5,
+            562.5,
             # Address pt 2
-            562.5, 562.5, 562.5, 562.5, 562.5, 562.5, 562.5, 562.5,
+            562.5,
+            562.5,
+            562.5,
+            562.5,
+            562.5,
+            562.5,
+            562.5,
+            562.5,
             # Address pt 3
-            562.5, 562.5, 562.5, 562.5, 562.5, 562.5, 562.5, 562.5,
+            562.5,
+            562.5,
+            562.5,
+            562.5,
+            562.5,
+            562.5,
+            562.5,
+            562.5,
             # Address pt 4
-            562.5, 562.5, 562.5, 562.5, 562.5, 1687.5, 562.5, 1687.5,
+            562.5,
+            562.5,
+            562.5,
+            562.5,
+            562.5,
+            1687.5,
+            562.5,
+            1687.5,
             # Command (LSB first) pt 1
-            562.5, 1687.5, 562.5, 562.5, 562.5, 1687.5, 562.5, 1687.5,
+            562.5,
+            1687.5,
+            562.5,
+            562.5,
+            562.5,
+            1687.5,
+            562.5,
+            1687.5,
             # Command (LSB first) pt 2
-            562.5, 562.5, 562.5, 1687.5, 562.5, 562.5, 562.5, 1687.5,
+            562.5,
+            562.5,
+            562.5,
+            1687.5,
+            562.5,
+            562.5,
+            562.5,
+            1687.5,
             # Command (LSB first) inverse pt 1
-            562.5, 562.5, 562.5, 1687.5, 562.5, 562.5, 562.5, 562.5,
+            562.5,
+            562.5,
+            562.5,
+            1687.5,
+            562.5,
+            562.5,
+            562.5,
+            562.5,
             # Command (LSB first) inverse pt 2
-            562.5, 1687.5, 562.5, 562.5, 562.5, 1687.5, 562.5, 562.5,
+            562.5,
+            1687.5,
+            562.5,
+            562.5,
+            562.5,
+            1687.5,
+            562.5,
+            562.5,
             # Final burst
             562.5
         ]
@@ -270,7 +408,8 @@ class TestNecDecoder(TestCase):
         decoder = NecDecoder()
         code = decoder.decode(TestNecDecoder.reference_pulses)
 
-        repeat_response = decoder.decode(TestNecDecoder.reference_repeat_pulses)
+        repeat_response = decoder.decode(
+            TestNecDecoder.reference_repeat_pulses)
 
         assert code == repeat_response
 
@@ -278,7 +417,10 @@ class TestNecDecoder(TestCase):
         decoder = NecDecoder()
         code = decoder.decode(TestNecDecoder.reference_pulses)
 
-        repeat_command_slow = [pulse + pulse * TestNecDecoder.time_multiplier for pulse in TestNecDecoder.reference_repeat_pulses]
+        repeat_command_slow = [
+            pulse + pulse * TestNecDecoder.time_multiplier
+            for pulse in TestNecDecoder.reference_repeat_pulses
+        ]
 
         repeat_response = decoder.decode(repeat_command_slow)
 
@@ -288,7 +430,10 @@ class TestNecDecoder(TestCase):
         decoder = NecDecoder()
         code = decoder.decode(TestNecDecoder.reference_pulses)
 
-        repeat_command_fast = [pulse + pulse * TestNecDecoder.time_multiplier for pulse in TestNecDecoder.reference_repeat_pulses]
+        repeat_command_fast = [
+            pulse + pulse * TestNecDecoder.time_multiplier
+            for pulse in TestNecDecoder.reference_repeat_pulses
+        ]
 
         repeat_response = decoder.decode(repeat_command_fast)
 

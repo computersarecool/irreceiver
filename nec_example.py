@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 """
 This is a simple example where pigpio on a Raspberry Pi is used to monitor the IR signal.
 The pigpio program detects the events, PiPulseCollector collects them and the NecDecoder decodes them.
@@ -19,8 +18,9 @@ class PiPulseCollector:
     """
     This class collects the timing between IR pulses
     """
-
-    def __init__(self, pi: pigpio.pi, receive_pin: int, done_callback: Callable, max_time: int, decoder: nec_decoder.NecDecoder):
+    def __init__(self, pi: pigpio.pi, receive_pin: int,
+                 done_callback: Callable, max_time: int,
+                 decoder: nec_decoder.NecDecoder):
         self.pi = pi
         self.receive_pin = receive_pin
         self.done_callback = done_callback
@@ -76,7 +76,8 @@ def ir_callback(code: int):
         code: The decoded signal
     """
 
-    print('Invalid code') if code == nec_decoder.INVALID_FRAME else print(hex(code))
+    print('Invalid code') if code == nec_decoder.INVALID_FRAME else print(
+        hex(code))
 
 
 def main():
@@ -88,7 +89,9 @@ def main():
     pi.set_mode(ir_pin, pigpio.INPUT)
 
     decoder = nec_decoder.NecDecoder()
-    collector = PiPulseCollector(pi, ir_pin, ir_callback, nec_decoder.FRAME_TIME_MS + nec_decoder.TIMING_TOLERANCE, decoder)
+    collector = PiPulseCollector(
+        pi, ir_pin, ir_callback,
+        nec_decoder.FRAME_TIME_MS + nec_decoder.TIMING_TOLERANCE, decoder)
     _ = pi.callback(ir_pin, pigpio.EITHER_EDGE, collector.collect_pulses)
 
     print('Press Ctrl-c to exit')

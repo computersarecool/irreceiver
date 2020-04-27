@@ -17,8 +17,9 @@ class NecDecoder:
     A single integer is returned where the first eight bits are the address and the second eight are the command.
     Most member variables come from the spec except timing_tolerance which was found empirically
     """
-
-    def __init__(self, extended_protocol=False, time_tolerance=TIMING_TOLERANCE):
+    def __init__(self,
+                 extended_protocol=False,
+                 time_tolerance=TIMING_TOLERANCE):
         self.leading_time = 9000
         self.new_pause_time = 4500
         self.repeat_pause_time = 2250
@@ -44,7 +45,8 @@ class NecDecoder:
         """
 
         for index, element in enumerate(pulses):
-            if abs(self.leading_time - element) < self.leading_time * self.timing_tolerance:
+            if abs(self.leading_time -
+                   element) < self.leading_time * self.timing_tolerance:
                 return index
 
         return INVALID_FRAME
@@ -59,9 +61,11 @@ class NecDecoder:
 
         """
 
-        if abs(pulses[start_index + 1] - self.new_pause_time) < self.timing_tolerance * self.new_pause_time:
+        if abs(pulses[start_index + 1] - self.new_pause_time
+               ) < self.timing_tolerance * self.new_pause_time:
             self.current_message_type = NEW_MESSAGE
-        elif abs(pulses[start_index + 1] - self.repeat_pause_time) < self.timing_tolerance * self.new_pause_time:
+        elif abs(pulses[start_index + 1] - self.repeat_pause_time
+                 ) < self.timing_tolerance * self.new_pause_time:
             self.current_message_type = REPEAT_MESSAGE
         else:
             self.current_message_type = INVALID_FRAME
@@ -89,20 +93,24 @@ class NecDecoder:
             if len(pulses) >= self.new_frame_pulses:
 
                 # Second pulse is a pause
-                if abs(self.new_pause_time - pulses[start_index + 1]) < self.new_pause_time * self.timing_tolerance:
+                if abs(self.new_pause_time - pulses[start_index + 1]
+                       ) < self.new_pause_time * self.timing_tolerance:
 
                     # Ending pulse is low
-                    if abs(self.low_time - pulses[self.new_frame_pulses - 1]) < self.low_time * self.timing_tolerance:
+                    if abs(self.low_time - pulses[self.new_frame_pulses - 1]
+                           ) < self.low_time * self.timing_tolerance:
                         return True
 
         elif self.current_message_type == REPEAT_MESSAGE:
             if len(pulses) >= self.repeat_frame_pulses:
 
                 # Second pulse is a pause
-                if abs(self.repeat_pause_time - pulses[start_index + 1]) < self.repeat_pause_time * self.timing_tolerance:
+                if abs(self.repeat_pause_time - pulses[start_index + 1]
+                       ) < self.repeat_pause_time * self.timing_tolerance:
 
                     # Ending pulse is low
-                    if abs(self.low_time - pulses[self.repeat_frame_pulses - 1]) < self.low_time * self.timing_tolerance:
+                    if abs(self.low_time - pulses[self.repeat_frame_pulses - 1]
+                           ) < self.low_time * self.timing_tolerance:
                         return True
 
         return False
@@ -121,9 +129,13 @@ class NecDecoder:
 
         # Pulses come in pairs of either short, short or short, long so we only need to look at every other pulse time
         first_data_bit_index = start_index + self.first_data_bit_index + 1
-        data_bits = pulses[first_data_bit_index:first_data_bit_index + self.new_frame_pulses:2]
+        data_bits = pulses[first_data_bit_index:first_data_bit_index +
+                           self.new_frame_pulses:2]
 
-        return [0 if abs(self.low_time - pulse) < self.timing_tolerance * self.low_time else 1 for pulse in data_bits]
+        return [
+            0 if abs(self.low_time - pulse) < self.timing_tolerance *
+            self.low_time else 1 for pulse in data_bits
+        ]
 
     def _validate_message(self, message_bits: list) -> bool:
         """
@@ -143,7 +155,8 @@ class NecDecoder:
         command_inverse = message_bits[24:32]
 
         # Check each bit in the command and return False if any two are not inverses
-        if not all(False for bit, bit_inverse in zip(command, command_inverse) if bit == bit_inverse):
+        if not all(False for bit, bit_inverse in zip(command, command_inverse)
+                   if bit == bit_inverse):
             return False
 
         # Address inverse is only checked for the non-extended protocol
@@ -152,7 +165,9 @@ class NecDecoder:
             address_inverse = message_bits[8:16]
 
             # Check each bit in the address and return False if any two are not inverses
-            if not all(False for bit, bit_inverse in zip(address, address_inverse) if bit == bit_inverse):
+            if not all(False
+                       for bit, bit_inverse in zip(address, address_inverse)
+                       if bit == bit_inverse):
                 return False
 
         return True
