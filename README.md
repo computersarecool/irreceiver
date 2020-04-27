@@ -1,5 +1,5 @@
 # IRReceiver
-*A module to parse the NEC IR remote control protocol*
+*A module to parse the NEC IR remote control protocol in Python*
 
 ## Description
 This is a fully tested module that creates a receiver for the NEC IR remote control protocol.
