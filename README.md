@@ -20,7 +20,7 @@ The NEC protocol is used by many remotes, you can read about it [here](https://w
 - Look at the file in the `examples` directory. Essentially just `import irreceiver` and call `decode` on an instance of `NecDecoder` 
 
 ## Project Structure
-All files in root
+Directory structure should be clear. All code is in the `irreceiver` directory.
 
 
 ### License
