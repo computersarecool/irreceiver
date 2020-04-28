@@ -17,7 +17,7 @@ The NEC protocol is used by many remotes, you can read about it [here](https://w
 - `pip install irreceiver`
 
 ## To Use
-- Look at the file `nec_example.py`. Essentially `import irreceiver` and call `decode` on an instance of `NecDecoder` 
+- Look at the file in the `examples` directory. Essentially just `import irreceiver` and call `decode` on an instance of `NecDecoder` 
 
 ## Project Structure
 All files in root
