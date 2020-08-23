@@ -5,9 +5,9 @@ from irreceiver import NecDecoder, INVALID_FRAME, REPEAT_MESSAGE, NEW_MESSAGE
 
 class TestNecDecoder(TestCase):
     # This is a tolerance which prohibits any two pulse times from overlapping
-    time_multiplier = .3
+    time_tolerance = .3
 
-    # Most tests are run against the frame for address 00h (00000000b) and command ADh (10101101b):
+    # Most tests are run against the the frame for address 00h (00000000b) and command ADh (10101101b):
     reference_pulses = [
         # Pulse and space
         9000,
@@ -94,10 +94,10 @@ class TestNecDecoder(TestCase):
         0, 1, 0, 0, 1, 0, 1, 0
     ]
 
-    # Which corresponds to 173 or 0x00AD in hex
+    # Which corresponds to 173 (0x00AD)
     reference_number = 0x00AD
 
-    # Pause, pulse space and low
+    # Times for pause, pulse space and low
     reference_repeat_pulses = [9000, 2250, 562.5]
 
     # Finding start of frame
@@ -110,7 +110,7 @@ class TestNecDecoder(TestCase):
 
     def test__find_start_index_slow(self):
         pulses_slow = [
-            pulse + pulse * TestNecDecoder.time_multiplier
+            pulse + pulse * TestNecDecoder.time_tolerance
             for pulse in TestNecDecoder.reference_pulses
         ]
 
@@ -122,7 +122,7 @@ class TestNecDecoder(TestCase):
 
     def test__find_start_index_fast(self):
         pulses_fast = [
-            pulse - pulse * TestNecDecoder.time_multiplier
+            pulse - pulse * TestNecDecoder.time_tolerance
             for pulse in TestNecDecoder.reference_pulses
         ]
 
@@ -159,7 +159,6 @@ class TestNecDecoder(TestCase):
 
         assert decoder.current_message_type == REPEAT_MESSAGE
 
-    # Valid pulses
     def test_valid_pulses(self):
         decoder = NecDecoder()
         start = decoder._find_start_index(TestNecDecoder.reference_pulses)
@@ -207,7 +206,7 @@ class TestNecDecoder(TestCase):
 
     def test_convert_pulses_slow(self):
         pulses_slow = [
-            pulse + pulse * TestNecDecoder.time_multiplier
+            pulse + pulse * TestNecDecoder.time_tolerance
             for pulse in TestNecDecoder.reference_pulses
         ]
 
@@ -219,7 +218,7 @@ class TestNecDecoder(TestCase):
 
     def test_convert_pulses_fast(self):
         pulses_fast = [
-            pulse - pulse * TestNecDecoder.time_multiplier
+            pulse - pulse * TestNecDecoder.time_tolerance
             for pulse in TestNecDecoder.reference_pulses
         ]
 
@@ -252,7 +251,7 @@ class TestNecDecoder(TestCase):
             TestNecDecoder.reference_bits) == TestNecDecoder.reference_number
 
     def test__create_number_from_bits_with_address(self):
-        # The spec bit_list looks like:
+        # The bit_list from the spec looks like:
         # bit_list_with_address = [
         #     0, 0, 0, 0, 0, 0, 0, 0,
         #     1, 1, 1, 1, 1, 1, 1, 1,
@@ -287,7 +286,7 @@ class TestNecDecoder(TestCase):
 
     def test_decode_spec_slow(self):
         pulses_slow = [
-            pulse + pulse * TestNecDecoder.time_multiplier
+            pulse + pulse * TestNecDecoder.time_tolerance
             for pulse in TestNecDecoder.reference_pulses
         ]
 
@@ -297,7 +296,7 @@ class TestNecDecoder(TestCase):
 
     def test_decode_spec_fast(self):
         pulses_slow = [
-            pulse - pulse * TestNecDecoder.time_multiplier
+            pulse - pulse * TestNecDecoder.time_tolerance
             for pulse in TestNecDecoder.reference_pulses
         ]
 
@@ -418,7 +417,7 @@ class TestNecDecoder(TestCase):
         code = decoder.decode(TestNecDecoder.reference_pulses)
 
         repeat_command_slow = [
-            pulse + pulse * TestNecDecoder.time_multiplier
+            pulse + pulse * TestNecDecoder.time_tolerance
             for pulse in TestNecDecoder.reference_repeat_pulses
         ]
 
@@ -431,7 +430,7 @@ class TestNecDecoder(TestCase):
         code = decoder.decode(TestNecDecoder.reference_pulses)
 
         repeat_command_fast = [
-            pulse + pulse * TestNecDecoder.time_multiplier
+            pulse + pulse * TestNecDecoder.time_tolerance
             for pulse in TestNecDecoder.reference_repeat_pulses
         ]
 

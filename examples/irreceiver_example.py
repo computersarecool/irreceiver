@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-This is a simple example where pigpio on a Raspberry Pi is used to monitor the IR signal.
-The pigpio program detects the events, PiPulseCollector collects them and the NecDecoder decodes them.
-Please see the pigpio for information on how to set it up.
-Other code would be placed in the try block which keeps this from exiting on the Pi.
+This is an example where pigpio on a Raspberry Pi is used to receive an IR message.
+pigpio detects the events, PiPulseCollector collects them and the NecDecoder decodes them.
+Please see pigpio documentation for information on how to set it up.
+Other code would be placed in the try block which keeps this program from exiting on the Pi.
 """
 
 import time
@@ -100,7 +100,7 @@ def main():
         # Do something here
 
         while True:
-            time.sleep(300)
+            time.sleep(1)
 
     except KeyboardInterrupt:
         print('Stopping')

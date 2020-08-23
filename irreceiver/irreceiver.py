@@ -1,7 +1,7 @@
 """
 This is a class to parse the NEC IR remote protocol.
 
-A reference is https://www.sbprojects.net/knowledge/ir/nec.php
+A reference for the protocol can be found at https://www.sbprojects.net/knowledge/ir/nec.php
 """
 
 INVALID_FRAME = -1
@@ -53,7 +53,7 @@ class NecDecoder:
 
     def _classify_message(self, pulses: list, start_index: int):
         """
-        Sets curent_message_type by looking at the pause after the ACG break
+        Sets current_message_type by looking at the pause after the ACG break
 
         Args:
             pulses: A list where each element is the time between pulses
@@ -194,7 +194,7 @@ class NecDecoder:
             address = (address << 1) | bit
 
         # Shift the address over to make room for the command
-        address = address << command_length
+        address <<= command_length
 
         command = 0
         for bit in reversed(data_bits[16:24:]):
