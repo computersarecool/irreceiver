@@ -28,7 +28,7 @@ and in my testing this did not work reliably. Not even close.**
 ```python
 from irreceiver import NecDecoder
 decoder = NecDecoder()
-# Create PULSES, a list of IR pulse timings
+# PULSES represents a list of IR pulse timings
 message = decoder.decode(PULSES)
 ```
 
