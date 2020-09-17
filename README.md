@@ -30,7 +30,7 @@ from irreceiver import NecDecoder
 decoder = NecDecoder()
 # PULSES represents a list of IR pulse timings
 message = decoder.decode(PULSES)
-# Message will be a number such as `0x00AD` where the first byte 00 is the address and the second byte AD is the command 
+# Message will be a number such as 0x00AD where the first byte 00 is the address and the second byte AD is the command 
 ```
 
 ## Project Structure
