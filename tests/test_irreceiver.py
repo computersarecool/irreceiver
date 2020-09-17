@@ -7,7 +7,7 @@ class TestNecDecoder(TestCase):
     # This is a tolerance which prohibits any two pulse times from overlapping
     time_tolerance = .3
 
-    # Most tests are run against the the frame for address 00h (00000000b) and command ADh (10101101b):
+    # Most tests are run against this frame which is for address 00h (00000000b) and command ADh (10101101b):
     reference_pulses = [
         # Pulse and space
         9000,
@@ -88,7 +88,7 @@ class TestNecDecoder(TestCase):
         562.5
     ]
 
-    # The reference_pulses correspond to this list of bits
+    # reference_pulses corresponds to this list of bits
     reference_bits = [
         0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1,
         0, 1, 0, 0, 1, 0, 1, 0
@@ -97,10 +97,100 @@ class TestNecDecoder(TestCase):
     # Which corresponds to 173 (0x00AD)
     reference_number = 0x00AD
 
-    # Times for pause, pulse space and low
+    # For the extended format, the address is now 49153 and not inverted
+    # The command is the same 173
+    # In bits this would look like:
+    # bit_list_with_address = [
+    #     1, 0, 0, 0, 0, 0, 0, 0,
+    #     0, 0, 0, 0, 0, 0, 1, 1,
+    #     1, 0, 1, 1, 0, 1, 0, 1,
+    #     0, 1, 0, 0, 1, 0, 1, 0
+    # ]
+    reference_pulses_extended = [
+        # Pulse and space
+        9000,
+        4500,
+        # Address pt 1
+        562.5,
+        1687.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        # Address pt 2
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        # Address pt 3
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        # Address pt 4
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        1687.5,
+        562.5,
+        1687.5,
+        # Command (LSB first) pt 1
+        562.5,
+        1687.5,
+        562.5,
+        562.5,
+        562.5,
+        1687.5,
+        562.5,
+        1687.5,
+        # Command (LSB first) pt 2
+        562.5,
+        562.5,
+        562.5,
+        1687.5,
+        562.5,
+        562.5,
+        562.5,
+        1687.5,
+        # Command (LSB first) inverse pt 1
+        562.5,
+        562.5,
+        562.5,
+        1687.5,
+        562.5,
+        562.5,
+        562.5,
+        562.5,
+        # Command (LSB first) inverse pt 2
+        562.5,
+        1687.5,
+        562.5,
+        562.5,
+        562.5,
+        1687.5,
+        562.5,
+        562.5,
+        # Final burst
+        562.5
+    ]
+
+    reference_pulses_extended_number = 0xC001AD
+
+    # Times for pause, pulse space and low from the spec
     reference_repeat_pulses = [9000, 2250, 562.5]
 
-    # Finding start of frame
     def test__find_start_index_spec(self):
         decoder = NecDecoder()
         first_element_index = 0
@@ -305,102 +395,10 @@ class TestNecDecoder(TestCase):
         assert decoder.decode(pulses_slow) == TestNecDecoder.reference_number
 
     def test_decode_spec_extended(self):
-        # The address is now 49153 and not inverted
-        # The command is the same 173
-        # In bits this would look like:
-        # bit_list_with_address = [
-        #     1, 0, 0, 0, 0, 0, 0, 0,
-        #     0, 0, 0, 0, 0, 0, 1, 1,
-        #     1, 0, 1, 1, 0, 1, 0, 1,
-        #     0, 1, 0, 0, 1, 0, 1, 0
-        # ]
-
-        reference_pulses_extended = [
-            # Pulse and space
-            9000,
-            4500,
-            # Address pt 1
-            562.5,
-            1687.5,
-            562.5,
-            562.5,
-            562.5,
-            562.5,
-            562.5,
-            562.5,
-            # Address pt 2
-            562.5,
-            562.5,
-            562.5,
-            562.5,
-            562.5,
-            562.5,
-            562.5,
-            562.5,
-            # Address pt 3
-            562.5,
-            562.5,
-            562.5,
-            562.5,
-            562.5,
-            562.5,
-            562.5,
-            562.5,
-            # Address pt 4
-            562.5,
-            562.5,
-            562.5,
-            562.5,
-            562.5,
-            1687.5,
-            562.5,
-            1687.5,
-            # Command (LSB first) pt 1
-            562.5,
-            1687.5,
-            562.5,
-            562.5,
-            562.5,
-            1687.5,
-            562.5,
-            1687.5,
-            # Command (LSB first) pt 2
-            562.5,
-            562.5,
-            562.5,
-            1687.5,
-            562.5,
-            562.5,
-            562.5,
-            1687.5,
-            # Command (LSB first) inverse pt 1
-            562.5,
-            562.5,
-            562.5,
-            1687.5,
-            562.5,
-            562.5,
-            562.5,
-            562.5,
-            # Command (LSB first) inverse pt 2
-            562.5,
-            1687.5,
-            562.5,
-            562.5,
-            562.5,
-            1687.5,
-            562.5,
-            562.5,
-            # Final burst
-            562.5
-        ]
-
-        reference_pulses_extended_number = 0xC001AD
-
         decoder = NecDecoder(True)
-        return_code = decoder.decode(reference_pulses_extended)
+        return_code = decoder.decode(TestNecDecoder.reference_pulses_extended)
 
-        assert return_code == reference_pulses_extended_number
+        assert return_code == TestNecDecoder.reference_pulses_extended_number
 
     def test_decode_repeat_spec(self):
         # Create a decoder and "send" a frame
