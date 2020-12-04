@@ -16,5 +16,5 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-      - name: Run tests with pytest
+      - name: Run tests with unittest
         run: python -m unittest
