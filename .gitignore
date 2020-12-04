@@ -2,3 +2,4 @@
 build/
 dist/
 irreceiver.egg-info/
+__pycache__/
