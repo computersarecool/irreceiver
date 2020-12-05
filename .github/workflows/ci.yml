@@ -3,14 +3,13 @@ on:
   push:
     branches:
       - master
-      - development
+
   pull_request:
     branches:
       - master
-      - development
 
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -18,5 +17,9 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
+      - name: Check formatting
+        run: |
+          pip install yapf
+          yapf --diff --recursive $GITHUB_WORKSPACE $*
       - name: Run tests with pytest
         run: python -m unittest
