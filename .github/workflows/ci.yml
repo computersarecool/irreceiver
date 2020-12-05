@@ -1,4 +1,4 @@
-name: Run Python Tests
+name: Lint and Unit Test
 on:
   push:
     branches:
