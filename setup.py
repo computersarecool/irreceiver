@@ -4,7 +4,8 @@ from irreceiver import __version__
 
 settings = {
     'name': 'irreceiver',
-    'description': 'A module to parse the NEC IR remote control protocol in Python',
+    'description':
+    'A module to parse the NEC IR remote control protocol in Python',
     'long_description_content_type': 'text/markdown',
     'url': 'https://github.com/computersarecool/irreceiver',
     'author': 'Willy Nolan',
