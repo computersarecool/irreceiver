@@ -1,9 +1,9 @@
-from unittest import TestCase
+import unittest
 
 from irreceiver import NecDecoder, INVALID_FRAME, REPEAT_MESSAGE, NEW_MESSAGE
 
 
-class TestNecDecoder(TestCase):
+class TestNecDecoder(unittest.TestCase):
     # This is a tolerance which prohibits any two pulse times from overlapping
     time_tolerance = .3
 
@@ -435,3 +435,7 @@ class TestNecDecoder(TestCase):
         repeat_response = decoder.decode(repeat_command_fast)
 
         assert code == repeat_response
+
+
+if __name__ == '__main__':
+    unittest.main()

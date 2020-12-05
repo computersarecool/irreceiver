@@ -1,0 +1,24 @@
+name: Lint and Unit Test
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Check formatting
+        run: |
+          pip install yapf
+          yapf --diff --recursive $GITHUB_WORKSPACE $*
+      - name: Run tests with unittest
+        run: python -m unittest

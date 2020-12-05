@@ -8,7 +8,7 @@ The NEC protocol is used by many remotes, you can read about it [here](https://w
 
 **NOTE: Although there is an example of this sketch that is made for the Raspberry PI, it is unlikely to work. 
 The Raspberry Pi does [not have a real time operating system](https://www.socallinuxexpo.org/sites/default/files/presentations/Steven_Doran_SCALE_13x.pdf)
-and in my testing this did not work reliably. Not even close.**
+and in my testing this did not work reliably.**
 
 ## Dependencies
 - This project has no external dependencies but the example code does depend on being run on a Raspberry Pi.
@@ -28,7 +28,7 @@ and in my testing this did not work reliably. Not even close.**
 ```python
 from irreceiver import NecDecoder
 decoder = NecDecoder()
-# PULSES represents a list of IR pulse timings
+# PULSES should be a list of IR pulse timings
 message = decoder.decode(PULSES)
 # Message will be a number such as 0x00AD where the first byte 00 is the address and the second byte AD is the command 
 ```
