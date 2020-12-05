@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - master
-
   pull_request:
     branches:
       - master
@@ -21,5 +20,5 @@ jobs:
         run: |
           pip install yapf
           yapf --diff --recursive $GITHUB_WORKSPACE $*
-      - name: Run tests with pytest
+      - name: Run tests with unittest
         run: python -m unittest
