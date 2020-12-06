@@ -12,7 +12,7 @@ and in my testing this did not work reliably.**
 
 ## Dependencies
 - This project has no external dependencies but the example code does depend on being run on a Raspberry Pi.
-- All code follows PEP 8 and is run through [YAPF](https://github.com/google/yapf) before it is committed
+- All code follows PEP 8 and there is a Github action to run code through [YAPF](https://github.com/google/yapf) before it is merged to the main branch.
 
 ## Tested On
 - A Raspberry Pi (first generation)
