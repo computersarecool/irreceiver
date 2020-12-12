@@ -18,8 +18,8 @@ class NecDecoder:
     Most member variables come from the spec except timing_tolerance which was found empirically
     """
     def __init__(self,
-                 extended_protocol=False,
-                 time_tolerance=TIMING_TOLERANCE):
+                 extended_protocol: bool = False,
+                 time_tolerance: float = TIMING_TOLERANCE):
         self.leading_time = 9000
         self.new_pause_time = 4500
         self.repeat_pause_time = 2250

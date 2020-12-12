@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 This is an example where pigpio on a Raspberry Pi is used to receive an IR message.
-pigpio detects the events, PiPulseCollector collects them and the NecDecoder decodes them.
+pigpio detects the events, PiPulseCollector collects them and NecDecoder decodes them.
 Please see pigpio documentation for information on how to set it up.
 Other code would be placed in the try block which keeps this program from exiting on the Pi.
 """
