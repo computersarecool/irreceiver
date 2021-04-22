@@ -2,7 +2,7 @@
 *A Python Package to parse the NEC IR remote control protocol*
 
 ## Description
-This is a fully tested module that creates a parser for the NEC IR remote control protocol.
+This is a fully tested Python package to parse the NEC IR remote control protocol.
 
 The NEC protocol is used by many remotes, you can read about it [here](https://www.sbprojects.net/knowledge/ir/nec.php).
 
